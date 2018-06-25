@@ -9,12 +9,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class JsonConnect extends AsyncTask<Void, Void, String > {
 
-    private final EmployeesModel.LoadJsonCallback callback;
+    private final LoadJsonCallback callback;
 
-    JsonConnect(EmployeesModel.LoadJsonCallback callback) {
+    JsonConnect(LoadJsonCallback callback) {
         this.callback = callback;
     }
 
