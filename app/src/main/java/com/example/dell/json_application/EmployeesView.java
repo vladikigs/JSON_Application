@@ -7,10 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+/**
+ *
+ * @author Vladislav Bashirov
+ */
 public class EmployeesView extends AppCompatActivity{
 
-    private ArrayList arrayListEmployees;
+    private ArrayList<HashMap<String, String>> arrayListEmployees = new ArrayList<>();
     private ProgressDialog progressDialog;
 
     @Override
@@ -28,11 +33,12 @@ public class EmployeesView extends AppCompatActivity{
     }
 
     private void init() {
-        EmployeesPresenter presenter = new EmployeesPresenter(this);
+        EmployeesModel model = new EmployeesModel();
+        EmployeesPresenter presenter = new EmployeesPresenter(this, model);
         presenter.onViewCreated();
     }
 
-    public void fillListView(ArrayList arrayList){
+    public void fillListView(ArrayList<HashMap<String, String>> arrayList){
         this.arrayListEmployees = arrayList;
         SimpleAdapter adapter = new SimpleAdapter(this, arrayListEmployees, android.R.layout.simple_list_item_2,
                 new String[]{"Name", "Info"},
@@ -54,7 +60,8 @@ public class EmployeesView extends AppCompatActivity{
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         hideProgress();
-        outState.putStringArrayList(getString(R.string.key_on_save_instance), arrayListEmployees);
+
+        outState.putSerializable(getString(R.string.key_on_save_instance), arrayListEmployees);
     }
 }
 
