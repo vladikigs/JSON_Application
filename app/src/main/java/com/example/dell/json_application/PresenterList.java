@@ -3,6 +3,9 @@ package com.example.dell.json_application;
 import com.example.dell.json_application.DeserializeClass.CompanyContainer;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class PresenterList {
 
     private String resultJson = "";
@@ -41,8 +44,10 @@ public class PresenterList {
 
     private void structuringContainer(){
         int countEmployees = container.company.employees.size();
+
         String[] nameEmployees = new String[countEmployees];
         String[] infoEmployees = new String[countEmployees];
+
         StringBuilder bufSkills = new StringBuilder("Skills: ");
 
         for (int i = 0; i < countEmployees; i++){
@@ -56,10 +61,22 @@ public class PresenterList {
 
             infoEmployees[i] = "Phone: " + container.company.employees.get(i).phone_number + "\n" + bufSkills;
             bufSkills = new StringBuilder("Skills: ");
+
         }
-        view.hideProgress();
-        view.setDataView(nameEmployees,infoEmployees,countEmployees);
+        createArrayMap(nameEmployees,infoEmployees,countEmployees);
     }
 
+    private void createArrayMap(String[] nameEmployees, String[] infoEmployees,int countEmployees){
+        ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
+        HashMap<String, String> map;
 
+        for (int i = 0; i < countEmployees; i++){
+            map = new HashMap<>();
+            map.put("Name", nameEmployees[i]);
+            map.put("Info", infoEmployees[i]);
+            arrayList.add(map);
+        }
+        view.hideProgress();
+        view.setDataView(arrayList);
+    }
 }

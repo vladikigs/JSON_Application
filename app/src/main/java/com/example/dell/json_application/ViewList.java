@@ -6,15 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-
-import com.example.dell.json_application.DeserializeClass.Company;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ViewList extends AppCompatActivity{
 
+    private ArrayList arrayList;
+
     private ProgressDialog progressDialog;
+
     PresenterList presenter;
 
     @Override
@@ -23,14 +22,13 @@ public class ViewList extends AppCompatActivity{
         setContentView(R.layout.activity_view);
 
         if(savedInstanceState != null){
-            String string = savedInstanceState.getString("key");
+            arrayList = savedInstanceState.getStringArrayList("saveArrayList");
+            setDataView(arrayList);
         }
         else {
             init();
         }
-
     }
-
 
     private void init() {
         ModelList model = new ModelList();
@@ -39,21 +37,12 @@ public class ViewList extends AppCompatActivity{
         presenter.createActivity();
     }
 
-    public void setDataView(String[] name, String[] info, int size){
-        ListView listView = findViewById(R.id.employeesList);
-
-        ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
-        HashMap<String, String> map;
-        for (int i = 0; i < size; i++){
-            map = new HashMap<>();
-            map.put("Name", name[i]);
-            map.put("Info", info[i]);
-            arrayList.add(map);
-        }
-
+    public void setDataView(ArrayList arrayList){
+        this.arrayList = arrayList;
         SimpleAdapter adapter = new SimpleAdapter(this, arrayList, android.R.layout.simple_list_item_2,
                 new String[]{"Name", "Info"},
                 new int[]{android.R.id.text1, android.R.id.text2});
+        ListView listView = findViewById(R.id.employeesList);
         listView.setAdapter(adapter);
     }
 
@@ -65,6 +54,11 @@ public class ViewList extends AppCompatActivity{
         if (progressDialog != null) {
             progressDialog.dismiss();
         }
+    }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putStringArrayList("saveArrayList", arrayList);
     }
 }
 
