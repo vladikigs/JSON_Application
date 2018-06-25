@@ -8,22 +8,28 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import java.util.ArrayList;
 
-public class ViewList extends AppCompatActivity{
+public class EmployeesView extends AppCompatActivity{
 
     private ArrayList arrayList;
 
     private ProgressDialog progressDialog;
 
-    PresenterList presenter;
+    EmployeesPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+            super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_view);
 
         if(savedInstanceState != null){
             arrayList = savedInstanceState.getStringArrayList("saveArrayList");
-            setDataView(arrayList);
+            if (arrayList != null){
+                setDataView(arrayList);
+            }
+            else {
+                init();
+            }
         }
         else {
             init();
@@ -31,8 +37,8 @@ public class ViewList extends AppCompatActivity{
     }
 
     private void init() {
-        ModelList model = new ModelList();
-        presenter = new PresenterList(model);
+        EmployeesModel model = new EmployeesModel();
+        presenter = new EmployeesPresenter(model);
         presenter.attachView(this);
         presenter.createActivity();
     }
@@ -58,6 +64,7 @@ public class ViewList extends AppCompatActivity{
 
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        hideProgress();
         outState.putStringArrayList("saveArrayList", arrayList);
     }
 }

@@ -10,11 +10,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Json extends AsyncTask<Void, Void, String > {
+public class JsonConnect extends AsyncTask<Void, Void, String > {
 
-    private final ModelList.LoadJsonCallback callback;
+    private final EmployeesModel.LoadJsonCallback callback;
 
-    Json(ModelList.LoadJsonCallback callback) {
+    JsonConnect(EmployeesModel.LoadJsonCallback callback) {
         this.callback = callback;
     }
 
