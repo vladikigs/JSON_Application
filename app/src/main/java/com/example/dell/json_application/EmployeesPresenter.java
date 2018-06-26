@@ -1,6 +1,6 @@
 package com.example.dell.json_application;
 
-import java.util.ArrayList;
+import com.example.dell.json_application.DeserializeClass.CompanyContainer;
 
 public class EmployeesPresenter {
 
@@ -16,16 +16,16 @@ public class EmployeesPresenter {
 
     public void onViewCreated() {
         view.showProgress();
-        getArrayEmployees(new GetEmployeesCallback() {
+        getEmployeesContainer(new GetEmployeesCallback() {
             @Override
-            public void onEmployeesArrayCreated(ArrayList arrayEmployees) {
-                view.fillListView(arrayEmployees);
+            public void onContainerEmployeesCreated(CompanyContainer container) {
+                view.setCompanyContainer(container);
                 view.hideProgress();
             }
         });
     }
 
-    private void getArrayEmployees(GetEmployeesCallback callback){
-        model.getArrayEmployees(callback);
+    private void getEmployeesContainer(GetEmployeesCallback callback){
+        model.getContainerEmployees(callback);
     }
 }

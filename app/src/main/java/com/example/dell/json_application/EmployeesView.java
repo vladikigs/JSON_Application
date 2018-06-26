@@ -1,13 +1,16 @@
 package com.example.dell.json_application;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import android.widget.ListView;
+import android.app.ProgressDialog;
 import android.widget.SimpleAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.example.dell.json_application.DeserializeClass.CompanyContainer;
+
 
 /**
  *
@@ -23,10 +26,11 @@ public class EmployeesView extends AppCompatActivity{
             super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_view);
-        if (savedInstanceState != null)
-            arrayListEmployees = savedInstanceState.getStringArrayList(getString(R.string.key_on_save_instance));
-
-        if(arrayListEmployees == null) {
+        if (savedInstanceState != null) {
+            arrayListEmployees = (ArrayList<HashMap<String, String>>) savedInstanceState.get(getString(R.string.key_on_save_instance));
+        }
+        assert arrayListEmployees != null;
+        if(arrayListEmployees.size() == 0) {
             init();
         }
         else fillListView(arrayListEmployees);
@@ -38,13 +42,20 @@ public class EmployeesView extends AppCompatActivity{
         presenter.onViewCreated();
     }
 
-    public void fillListView(ArrayList<HashMap<String, String>> arrayList){
-        this.arrayListEmployees = arrayList;
-        SimpleAdapter adapter = new SimpleAdapter(this, arrayListEmployees, android.R.layout.simple_list_item_2,
+    public void setCompanyContainer(CompanyContainer container){
+        CompanyContainerToArrayListAdapter adapterList = new CompanyContainerToArrayListAdapter(container);
+        ArrayList<HashMap<String, String>> arrayListEmployees = adapterList.getArrayEmployees();
+        this.arrayListEmployees = arrayListEmployees;
+
+        fillListView(arrayListEmployees);
+    }
+
+    private void fillListView(ArrayList<HashMap<String, String>> arrayListEmployees){
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, arrayListEmployees, android.R.layout.simple_list_item_2,
                 new String[]{"Name", "Info"},
                 new int[]{android.R.id.text1, android.R.id.text2});
         ListView listView = findViewById(R.id.employeesList);
-        listView.setAdapter(adapter);
+        listView.setAdapter(simpleAdapter);
     }
 
     public void showProgress() {
