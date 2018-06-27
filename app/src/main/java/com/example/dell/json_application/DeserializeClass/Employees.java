@@ -1,21 +1,32 @@
 package com.example.dell.json_application.DeserializeClass;
 
+import java.io.Serializable;
 import java.util.List;
 
-public  class Employees {
-    public   String name;
-    public   String phone_number;
-    public  List<String> skills;
+public  class Employees implements Serializable {
 
-    public List<String> getSkills() {
-        return skills;
-    }
+    private String name;
+    private String phone_number;
+    private List<String> skills;
 
-    public String getPhoneNumber(){
-        return phone_number;
+    public Employees() {
     }
 
     public String getName(){
         return name;
+    }
+
+    public String getInfo() {
+        StringBuilder info = new StringBuilder();
+
+        info.append("Phone: ").append(phone_number).append("\n");
+
+        info.append("Skills: ");
+        int countSkills = skills.size();
+        for (int j = 0; j < countSkills; j++){
+            info.append(skills.get(j));
+            if (j != countSkills - 1) info.append(", ");
+        }
+        return info.toString();
     }
 }

@@ -1,16 +1,15 @@
 package com.example.dell.json_application;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
+import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.app.ProgressDialog;
-import android.widget.SimpleAdapter;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-import com.example.dell.json_application.DeserializeClass.CompanyContainer;
+import com.example.dell.json_application.DeserializeClass.Employees;
 
+import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -18,42 +17,38 @@ import com.example.dell.json_application.DeserializeClass.CompanyContainer;
  */
 public class EmployeesView extends AppCompatActivity{
 
-    private ArrayList<HashMap<String, String>> arrayListEmployees = new ArrayList<>();
+    //private ArrayList<HashMap<String, String>> arrayListEmployees = new ArrayList<>();
     private ProgressDialog progressDialog;
+    private List<Employees> listEmployees;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
+
         if (savedInstanceState != null) {
-            arrayListEmployees = (ArrayList<HashMap<String, String>>) savedInstanceState.get(getString(R.string.key_on_save_instance));
+            listEmployees = (List<Employees>) savedInstanceState.get(getString(R.string.key_on_save_list));
         }
-        assert arrayListEmployees != null;
-        if(arrayListEmployees.size() == 0) {
+
+        if(listEmployees == null) {
             init();
         }
-        else fillListView(arrayListEmployees);
+        else createAdapter(listEmployees);
     }
 
     private void init() {
         EmployeesModel model = new EmployeesModel();
         EmployeesPresenter presenter = new EmployeesPresenter(this, model);
-        presenter.onViewCreated();
+        presenter.onViewReady();
     }
 
-    public void setCompanyContainer(CompanyContainer container){
-        CompanyContainerToArrayListAdapter adapterList = new CompanyContainerToArrayListAdapter(container);
-        ArrayList<HashMap<String, String>> arrayListEmployees = adapterList.getArrayEmployees();
-        this.arrayListEmployees = arrayListEmployees;
-
-        fillListView(arrayListEmployees);
+    public void createAdapter(List<Employees> conteinerEmployees){
+        this.listEmployees = conteinerEmployees;
+        ListViewAdapter listViewAdapter = new ListViewAdapter(this, conteinerEmployees);
+        fillListView(listViewAdapter);
     }
 
-    private void fillListView(ArrayList<HashMap<String, String>> arrayListEmployees){
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, arrayListEmployees, android.R.layout.simple_list_item_2,
-                new String[]{"Name", "Info"},
-                new int[]{android.R.id.text1, android.R.id.text2});
+    private void fillListView(BaseAdapter simpleAdapter){
         ListView listView = findViewById(R.id.employeesList);
         listView.setAdapter(simpleAdapter);
     }
@@ -72,7 +67,7 @@ public class EmployeesView extends AppCompatActivity{
         super.onSaveInstanceState(outState);
         hideProgress();
 
-        outState.putSerializable(getString(R.string.key_on_save_instance), arrayListEmployees);
+        outState.putSerializable(getString(R.string.key_on_save_list), (Serializable) listEmployees);
     }
 }
 

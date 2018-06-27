@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class JsonConnect extends AsyncTask<Void, Void, String > {
 
@@ -54,11 +53,14 @@ public class JsonConnect extends AsyncTask<Void, Void, String > {
         return resultJson;
     }
 
-
     @Override
     protected void onPostExecute(String strJson) {
         if (callback != null) {
             callback.onLoad(strJson);
         }
+    }
+
+    public interface LoadJsonCallback {
+        void onLoad(String Json);
     }
 }

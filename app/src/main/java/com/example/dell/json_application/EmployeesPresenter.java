@@ -14,12 +14,12 @@ public class EmployeesPresenter {
         this.model = model;
     }
 
-    public void onViewCreated() {
+    public void onViewReady() {
         view.showProgress();
         getEmployeesContainer(new GetEmployeesCallback() {
             @Override
             public void onContainerEmployeesCreated(CompanyContainer container) {
-                view.setCompanyContainer(container);
+                view.createAdapter(container.getCompany().getEmployees());
                 view.hideProgress();
             }
         });
@@ -27,5 +27,9 @@ public class EmployeesPresenter {
 
     private void getEmployeesContainer(GetEmployeesCallback callback){
         model.getContainerEmployees(callback);
+    }
+
+    public interface GetEmployeesCallback {
+        void onContainerEmployeesCreated(CompanyContainer container);
     }
 }
